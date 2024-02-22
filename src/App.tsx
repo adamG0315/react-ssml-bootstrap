@@ -1,26 +1,32 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Alert, Container, Spinner } from "react-bootstrap";
+import useSSMLData from "./hooks/useSSMLData";
+import SSMLPlayer from "./components/SSMLPlayer";
+import "./App.css"
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	const {isLoading, isError, ssmlData} = useSSMLData()
+
+	let content;
+
+	if(isLoading) {
+		content = <Spinner animation="border" variant="light"/>
+	}
+
+	if(isError) {
+		content = <Alert variant="danger">
+			Oops, something went wrong...
+		</Alert>
+	}
+
+	if(ssmlData) {
+		content = <SSMLPlayer/>
+	}
+
+	return (
+		<Container className="App d-flex justify-content-center align-items-center vh-100" >
+			{content}
+		</Container>
+	);
 }
 
 export default App;
